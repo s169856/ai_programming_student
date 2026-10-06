@@ -21,7 +21,22 @@ class SlidingPuzzle:
 
     def possible_new_configurations(self):
         # TODO: geef alle nieuwe configuraties door het lege vakje te verschuiven
-        return []
+        row, col = self.locate_empty()
+
+        moves =  [[-1, 0], [1, 0], [0, 1], [0, -1]] # links, rechts, boven, onder
+        configurations = []
+        for col_move, row_move in moves:
+            new_col_pos = col - col_move
+            new_row_pos = row - row_move
+
+            if (new_col_pos or new_row_pos) >= 0 or (new_col_pos, new_row_pos) <= 2:
+                new_state = self.duplicate()
+
+                new_state.Game[row][col], new_state.Game[new_row_pos][new_col_pos] = new_state.Game[new_row_pos][new_col_pos], new_state.Game[row][col]
+
+                configurations.append(new_state)
+
+        return configurations
 
     def locate_empty(self):
         for row in range(self.GRIDSIZE):
@@ -32,7 +47,11 @@ class SlidingPuzzle:
 
     def manhattan_distance(self):
         # TODO: bereken de Manhattan-afstand tot de goal-configuratie
-        return 0
+        row_goal, col_goal = 2, 2
+        row_game, col_game = self.locate_empty()
+
+        return abs(row_goal - row_game) + abs(col_goal - col_game)
+ 
 
     def is_goal(self):
         return np.array_equal(self.Game, self.GOAL)
@@ -47,9 +66,10 @@ class SlidingPuzzle:
         print("---")
 
 
-def solve_puzzle(start_puzzle):
+def solve_puzzle(start_puzzle: SlidingPuzzle):
     # TODO: los de puzzel op met BFS
-    pass
+    if start_puzzle.is_goal():
+        pass
 
 
 if __name__ == "__main__":

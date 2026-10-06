@@ -55,7 +55,7 @@ class Node:
 
     def __init__(self, state: State, parent: "Node | None" = None) -> None:
         self.state = state
-        self.actions: list[Node] = []
+        self.actions: list[Node] = [] # buren in een node van een graaf
         # Extra t.o.v. de cursustekst: parent-verwijzing om het pad te reconstrueren
         self.parent = parent
 
@@ -65,12 +65,25 @@ class Node:
 
 def bouw_nodes(graaf: dict[str, list[str]]) -> dict[str, Node]:
     """Vertaal de adjacency-dict naar Node-objecten met acties."""
-    pass
+    nodes = {stad: Node(State(stad)) for stad in graaf}
 
+    for stad, buurnodes in graaf.items():
+        # buren toevoegen
+        for buur in buurnodes:
+            nodes[stad].add_action(nodes[buur])
+
+    return nodes
 
 def reconstruct_pad(node: Node) -> list[str]:
     """Bouw het gevonden pad op via de parent-verwijzingen."""
-    pass
+    pad = []
+
+    while node is not None:
+        pad.append(node.state.name)
+        node = node.parent
+
+    return pad
+
 
 
 def breadth_first_search(
@@ -79,8 +92,37 @@ def breadth_first_search(
     """BFS volgens de cursustekst: openklappen niveau per niveau via een FIFO-queue.
     Vindt het pad met het minste aantal steden.
     """
-    pass
+    nodes = bouw_nodes(graaf)
+    initial_node = nodes[start] # de NODE antwerpen
+    goal_node = nodes[doel]
 
+    frontier = deque([initial_node])
+    visited = set()
+
+    # loop maken
+    while frontier: # Zolang de frontier niet leeg is, doe...
+        # Welke node?
+        node = frontier.popleft()
+
+        # Check of dit de oplossing is
+        if node.state.name == goal_node.state.name:
+            return reconstruct_pad(node) # We zijn klaar
+
+        # We zijn nog niet in Parijs
+        visited.add(node)
+
+        # Node openklappen
+        for neighbor in node.actions:
+            # Neighbor is breda
+            if neighbor not in visited:
+                frontier.append(neighbor)
+
+                if neighbor.parent is None:
+                    neighbor.parent = node
+
+# Wat gebeurt hier ?
+# Heel het gecontroleerde deel met initial state gezien (en oplossing niet gevonden)
+    return None
 
 def depth_first_search(
     graaf: dict[str, list[str]], start: str, doel: str, verbose: bool = False

@@ -1,5 +1,5 @@
 """
-Oefening 3: Sliding Puzzle (8-puzzle)
+Oefening 2: Sliding Puzzle (8-puzzle)
 ======================================
 Implementeer de sliding puzzle en los hem op met BFS/DFS.
 """

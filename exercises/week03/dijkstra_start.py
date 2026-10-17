@@ -29,8 +29,8 @@ class Edge:
 
 class Problem:
     def __init__(self):
-        self.InitialState = None
-        self.GoalState = None
+        self.InitialState: Node = None
+        self.GoalState: Node = None
 
     @staticmethod
     def read_from_file(filepath):
@@ -77,9 +77,26 @@ class Path:
         return "->".join(node_names) + "=" + str(self.Cost)
 
 
-def dijkstra(problem):
+def dijkstra(problem: Problem):
     # TODO: implementeer Dijkstra met een priority queue (heapq)
-    pass
+
+    result: Path = Path(problem.InitialState)
+    shortest_paths_to_node = {}
+
+    while result.LeafNode != problem.GoalState:
+        actions_heap = []
+
+        for action in result.LeafNode.Actions:
+            if action.ToNode not in result.Nodes:
+                heapq.heappush(actions_heap, (action.Cost, action.ToNode))
+
+        cost, node = heapq.heappop(actions_heap)
+        
+        result.Nodes.append(node)
+        result.LeafNode = node
+        result.Cost += cost
+
+    return result
 
 
 # Maak een testgraafbestand aan

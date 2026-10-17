@@ -404,3 +404,19 @@ if __name__ == "__main__":
     probleem.InitialState = n_a
     probleem.GoalState = n_c
     print("Kortste pad:", dijkstra(probleem))
+
+    test_data = """A
+H
+A: B 2 C 3
+B: D 6 E 5
+C: F 1
+D: H 7
+E: H 6
+F: H 2
+"""
+    with open("test_graaf.txt", "w") as f:
+        f.write(test_data)
+
+    problem = Problem.read_from_file("test_graaf.txt")
+    pad = dijkstra(problem)
+    print("Kortste pad:", pad)

@@ -46,13 +46,22 @@ class FaultTolerantAgent:
 
     def __init__(self):
         # TODO: interne state — welke variabelen heb je nodig?
+<<<<<<< HEAD
+        self.previous = None
+=======
         self.previous_value = None
+>>>>>>> upstream/main
         self.suspected_sensor = None
 
     def read_all(self, p: Reading) -> tuple[float, float]:
         """Sensors: geef beide metingen terug."""
         # TODO
+<<<<<<< HEAD
+        metingen = (p.sensor_a, p.sensor_b)
+        return metingen
+=======
         return (p.sensor_a, p.sensor_b)
+>>>>>>> upstream/main
 
     def reliable_value(self, a: float, b: float, previous: Optional[float]) -> float:
         """Sensor model: bepaal de meest betrouwbare hoogtemeting.
@@ -64,7 +73,20 @@ class FaultTolerantAgent:
         - Is er geen vorige waarde (eerste meetslag)? -> kies
           bij voorkeur sensor a.
         """
-        # TODO: implementeer dit 
+        # TODO: implementeer dit
+        if abs(a - b) < self.TOLERANCE:
+            # betrouwbaar
+            self.suspected_sensor = None
+            return (a + b)/2
+        else: 
+            # niet betrouwbare sensor
+            if abs(a - self.previous) < abs(b - self.previous):
+                self.suspected_sensor = "b"
+                return "a"
+            else:
+                self.suspected_sensor = "a"
+                return "b"
+
 
         if abs(a - b) < self.TOLERANCE : 
             # betrouwbaar
@@ -85,6 +107,20 @@ class FaultTolerantAgent:
         # TODO: kies de betrouwbare meting, bepaal de trend (delta t.o.v.
         #       de vorige waarde) en vraag correctie aan als de daling
         #       sneller is dan DESCENT_LIMIT. Vergeet de interne state
+<<<<<<< HEAD
+        #       niet bij te werken. 
+
+        a, b= self.read_all(p)
+        reliable_value = self.reliable_value(a, b, self.previous)
+
+        #eerste keer self.previous = None
+        if self.previous is None:
+            self.previous = reliable_value
+            return Nothing()
+
+        delta = reliable_value - self.previous # bij daling wil je een negatief getal
+        self.previous = reliable_value
+=======
         #       niet bij te werken.
         a,b = self.read_all()
         reliable_value = self.reliable_value(a,b)
@@ -96,6 +132,7 @@ class FaultTolerantAgent:
 
         delta = reliable_value - self.previous_value # bij daling wil je een negatief getal
         self.previous_value = reliable_value
+>>>>>>> upstream/main
         if delta < self.DESCENT_LIMIT:
             return Correct()
         return Nothing()

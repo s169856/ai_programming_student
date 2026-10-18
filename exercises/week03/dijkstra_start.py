@@ -77,9 +77,28 @@ class Path:
         return "->".join(node_names) + "=" + str(self.Cost)
 
 
-def dijkstra(problem):
+def dijkstra(problem : Problem):
     # TODO: implementeer Dijkstra met een priority queue (heapq)
-    pass
+    afstand = {problem.InitialState: 0.0}
+    parent = {problem.InitialState: None}
+    visited = {}
+    heap = [(0.0, problem.InitialState)]
+
+    while heap:
+        current_cost, current_node = heapq.heappop(heap)
+
+        visited.add(current_node)
+
+        if current_node is problem.GoalState:
+            cost = 0
+            for node in parent:
+                cost = cost + node
+
+            return cost
+
+        for action in current_node.Actions:
+            heap.append((action, action.cost))
+            afstand.add(action.cost)
 
 
 # Maak een testgraafbestand aan

@@ -100,9 +100,6 @@ def dijkstra(problem : Problem):
             heap.append((action, action.cost))
             afstand.add(action.cost)
 
-# Dijkstra is zeer moeilijk !!!
-
-
 # Maak een testgraafbestand aan
 test_data = """A
 H

@@ -29,6 +29,15 @@ class TSPSolver:
             steden, plus de afstand van de laatste stad terug naar de eerste.
         """
         #TODO
+        totale_afstand = 0
+
+        for i_punt in range(len(tour) -1):
+            totale_afstand = totale_afstand + self.distance_matrix[tour[i_punt]][tour[i_punt + 1]]
+
+        totale_afstand = totale_afstand + self.distance_matrix[tour[-1]][tour[0]]
+
+        return totale_afstand
+
 
     @staticmethod
     def _canonical(tour: list[int]) -> list[int]:
@@ -60,14 +69,39 @@ class TSPSolver:
             (beginnend bij stad 0) en de bijhorende totale afstand.
         """
         #TODO
+        current_tour = list(range(self.num_cities))
+        initial_distance = self.total_distance(current_tour)
+        
+        best_distance = self.total_distance(current_tour)
+        best_tour = current_tour
 
+        for k in range(self.num_iterations):
+            i, j = random.sample(range(self.num_cities), 2)
+            new_tour = current_tour.copy()
+            new_tour[i], new_tour[j] = new_tour[j], new_tour[i]
+
+            new_distance = self.total_distance(new_tour)
+            T = self.initial_temperature * self.cooling_rate 
+
+            if new_distance > best_distance:
+                delta = new_distance - initial_distance
+                P = math.exp(-delta / T)
+
+                if random.random() < P:
+                    current_tour = new_tour
+            else: 
+                initial_distance = new_distance
+
+            best_distance = min(best_distance, initial_distance)
+
+        return best_tour, best_distance
 
 if __name__ == "__main__":
     distance_matrix = np.array([
-        [0, 29, 20, 21],
-        [29, 0, 15, 18],
-        [20, 15, 0, 25],
-        [21, 18, 25, 0]
+        [0, 29, 20, 21], # Dit zijn de afstanden van 0 -> ander punt
+        [29, 0, 15, 18], # Dit zijn de afstanden van 1 -> ander punt
+        [20, 15, 0, 25], # Dit zijn de afstanden van 2 -> ander punt
+        [21, 18, 25, 0]  # Dit zijn de afstanden van 3 -> ander punt
     ])
 
     tsp_solver = TSPSolver(distance_matrix)

@@ -32,9 +32,9 @@ class TSPSolver:
         totale_afstand = 0
 
         for i_punt in range(len(tour) -1):
-            totale_afstand = totale_afstand + self.distance_matrix[tour[i_punt]][tour[i_punt + 1]]
+            totale_afstand += self.distance_matrix[tour[i_punt]][tour[i_punt + 1]]
 
-        totale_afstand = totale_afstand + self.distance_matrix[tour[-1]][tour[0]]
+        totale_afstand += self.distance_matrix[tour[-1]][tour[0]]
 
         return totale_afstand
 
@@ -75,7 +75,7 @@ class TSPSolver:
         best_distance = self.total_distance(current_tour)
         best_tour = current_tour
 
-        for k in range(self.num_iterations):
+        for _ in range(self.num_iterations):
             i, j = random.sample(range(self.num_cities), 2)
             new_tour = current_tour.copy()
             new_tour[i], new_tour[j] = new_tour[j], new_tour[i]

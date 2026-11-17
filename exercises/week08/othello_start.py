@@ -3,7 +3,7 @@ Oefening: Mini Othello met Evaluatiefunctie & Minimax
 =======================================================
 """
 import random
-
+import copy
 
 class Othello:
     def __init__(self):
@@ -83,15 +83,34 @@ class Othello:
 
     def random_move(self):
         # TODO: kies een geldige zet
-        pass
+        moves = self.valid_moves(self.player)
+
+        return random.choice(moves)
 
     def evaluate(self, player):
         # TODO: evaluatiefunctie (bijv. stukken + mobiliteit)
-        pass
+
+        if player == "X":
+            own_stones, opponent_stones = self.count_pieces()
+        else:
+            opponent_stones, own_stones = self.count_pieces()
+
+        mobility = len(self.valid_moves(player))
+
+        return (own_stones - opponent_stones) + mobility
+
+    def copy(self):
+        return self
 
     def minimax(self, depth, is_maximizing, player):
         # TODO: implementeer minimax (simuleer zetten op een kopie)
-        pass
+        
+        for move in self.valid_moves(player):
+            new_move = self.copy()
+            
+
+
+        
 
     def best_move(self, depth=3):
         # TODO: kies de beste zet via minimax

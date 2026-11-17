@@ -4,16 +4,17 @@ Oefening: TicTacToe met Minimax & Alpha-Beta
 """
 import copy
 
-class Player():
-    def __init__(self):
-        pass
+class Player:
+    def __init__(self, position, has_turn):
+        self.position = position
+        self.has_turn = has_turn
     
 
 class TicTacToe:
     def __init__(self):
         self.board = [[' ' for _ in range(3)] for _ in range(3)]
-        self.playerX = True
-        self.playerO = False
+        self.playerX = Player(has_turn=True)
+        self.playerO = Player(has_turn=False)
 
     def possible_moves(self):
         """Geef lijst van (rij, kolom)-tupels van lege velden."""
@@ -22,8 +23,8 @@ class TicTacToe:
     def is_valid_move(self, x, y):        
         return bool(x  == " " or y == " ")
     
-    def make_move(self, x, y, player):
-        pass
+    def make_move(self, x, y, player: Player):
+        player.position = (x, y)
 
     def undo_move(self, x, y):
         self.board[x][y] = ' '
